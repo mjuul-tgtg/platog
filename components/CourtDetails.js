@@ -1,6 +1,6 @@
 
 import * as React from 'react';
-import { View, Text, FlatList, StyleSheet, Button, Alert, Image } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Button, Alert, Image, Linking } from 'react-native';
 import firebase from 'firebase';
 import { YellowBox } from 'react-native';
 import _ from 'lodash';
@@ -89,7 +89,8 @@ export default class CourtDetails extends React.Component {
             return <Text>No data</Text>;
         }
 
-        return (
+
+    return (
             <View style={styles.container}>
                 <Image
                     style={styles.courtCover}
@@ -103,7 +104,7 @@ export default class CourtDetails extends React.Component {
                 </View>
                 <View style={styles.row}>
                     <Text style={styles.label}>Address</Text>
-                    <Text style={styles.value}>{court.address}</Text>
+                    <Text style={{color:"blue"}} onPress={() => Linking.openURL("https://www.google.com/maps/place/" + court.address)}>{court.address}</Text>
                 </View>
                 <View style={styles.row}>
                     <Text style={styles.label}>Postal</Text>

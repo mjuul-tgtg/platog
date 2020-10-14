@@ -2,20 +2,39 @@ import * as React from 'react';
 import { Text, View, StyleSheet, Button, SafeAreaView } from 'react-native';
 import Constants from 'expo-constants';
 import ViewCourtsView from "./ViewCourtsView";
+import * as Location from "expo-location";
+import * as Permissions from "expo-permissions";
 
 export default class ViewCourtScreen extends React.Component {
     state = {
         enableMapView: false,
-        enableMapViewButtonText:"Map"
+        enableMapViewButtonText:"Change to Map view",
+        hasLocationPermission: null,
+        currentLocation: null,
+    };
+
+    getLocationPermission = async () => {
+        const { status } = await Permissions.askAsync(Permissions.LOCATION);
+        this.setState({ hasLocationPermission: status });
+    };
+
+    componentDidMount = async () => {
+        await this.getLocationPermission();
+        await this.updateLocation();
+    };
+
+    updateLocation = async () => {
+        const { coords } = await Location.getCurrentPositionAsync();
+        this.setState({ currentLocation: coords });
     };
 
 
     changeView = () => {
 
         let enableMapView = !this.state.enableMapView
-        let enableMapViewButtonText = "Map"
+        let enableMapViewButtonText = "Change to Map view"
         if(enableMapView){
-            enableMapViewButtonText = "List"
+            enableMapViewButtonText = "Change to List view"
         }
 
         this.setState({enableMapView: enableMapView,
@@ -27,15 +46,15 @@ export default class ViewCourtScreen extends React.Component {
     render() {
         const {
             enableMapView,
-            enableMapViewButtonText
+            enableMapViewButtonText,
+            currentLocation
         } = this.state;
-
 
             return (
                 <View style={styles.container}>
 
                     <Text style={styles.infoText}>Find a court near you!</Text>
-                    <ViewCourtsView enableMapView={enableMapView}/>
+                    <ViewCourtsView enableMapView={enableMapView} currentLocation={currentLocation}/>
                     <Button style={styles.changeView} title={enableMapViewButtonText} onPress={this.changeView} />
 
                 </View>

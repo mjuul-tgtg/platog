@@ -13,7 +13,7 @@ const ListStackNavigator = createStackNavigator(
         CourtList: {
             screen: CourtList,
             navigationOptions:
-                {title: "Courts"}
+                {title: "List View"}
         },
         CourtDetails: {screen: CourtDetails,
             navigationOptions:
@@ -25,19 +25,36 @@ const ListStackNavigator = createStackNavigator(
 
 const ListContainer = createAppContainer(ListStackNavigator);
 
-export default class ViewCourtsView extends React.Component {
-    state = {};
+const MapStackNavigator = createStackNavigator(
+    {
+        CourtList: {
+            screen: CourtMap,
+            navigationOptions:
+                {title: "Map View"}
+        },
+        CourtDetails: {screen: CourtDetails,
+            navigationOptions:
+                {title: "Details"}
+        },
+    },
+    {initialRouteKey: 'CourtList'},
+);
 
+const MapContainer = createAppContainer(MapStackNavigator);
+
+export default class ViewCourtsView extends React.Component {
+
+    state = {};
 
     render() {
 
-        const {enableMapView} = this.props
+        const {enableMapView, currentLocation} = this.props
+
 
         if (enableMapView) {
             return (
                 <View style={styles.container}>
-                    <CourtMap/>
-
+                    <MapContainer/>
                 </View>
             );
         }

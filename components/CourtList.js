@@ -1,32 +1,80 @@
 
 import * as React from 'react';
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import {View, Text, FlatList, TouchableOpacity, SafeAreaView, Button} from 'react-native';
 import firebase from 'firebase';
 import CourtListItem from "./CourtListItem";
+import * as Permissions from "expo-permissions";
+import * as Location from "expo-location";
+import {getDistance} from "geolib";
 
 
 export default class CourtList extends React.Component {
+
     state = {
         courts: {},
+        currentLocation: null,
     };
 
-    componentDidMount() {
+    componentDidMount = async () => {
         firebase
             .database()
             .ref('/courts')
             .on('value', snapshot => {
                 this.setState({ courts: snapshot.val() });
             });
-    }
+        await this.updateLocation();
+        this.calculateDistances()
+    };
 
     handleSelectCourt = id => {
-        console.log("HELLO")
-
         this.props.navigation.navigate('CourtDetails', { id });
     };
 
+
+    updateLocation = async () => {
+        const { coords } = await Location.getCurrentPositionAsync();
+        this.setState({ currentLocation: coords });
+
+    };
+
+    //https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value
+    dynamicSort(property) {
+        var sortOrder = 1;
+        if(property[0] === "-") {
+            sortOrder = -1;
+            property = property.substr(1);
+        }
+        return function (a,b) {
+            /* next line works with strings and numbers,
+             * and you may want to customize it to your needs
+             */
+            var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+            return result * sortOrder;
+        }
+    }
+
+    calculateDistances = () => {
+
+        const { courts, currentLocation } = this.state;
+
+        const courtArray = Object.values(courts)
+
+        courtArray.forEach(court => {
+            let dis = getDistance(
+                {latitude: court.latitude, longitude: court.longitude},
+                {latitude: currentLocation.latitude, longitude: currentLocation.longitude},
+            );
+            court.distance = dis
+        })
+        courtArray.sort(this.dynamicSort("distance"))
+        this.setState({courts:courtArray})
+    };
+
+
     render() {
+        //const { currentLocation } = this.props
         const { courts } = this.state;
+
         // Vi viser ingenting hvis der ikke er data
         if (!courts) {
             return null;
@@ -35,11 +83,12 @@ export default class CourtList extends React.Component {
         const courtArray = Object.values(courts);
         // Vi skal også bruge alle IDer, så vi tager alle keys også.
         const courtKeys = Object.keys(courts);
+
         return (
             <View>
                 <FlatList
                     data={courtArray}
-                    // Vi bruger carKeys til at finde ID på den aktuelle bil og returnerer dette som key, og giver det med som ID til CarListItem
+                    // Vi bruger courtKeys til at finde ID på den aktuelle bil og returnerer dette som key, og giver det med som ID til CarListItem
                     keyExtractor={(item, index) => courtKeys[index]}
                     renderItem={({ item, index }) => (
                         <CourtListItem

@@ -8,6 +8,8 @@ import { AntDesign } from '@expo/vector-icons';
 import AddCourt from "./components/AddCourt";
 import ViewCourtScreen from "./components/ViewCourtScreen";
 import firebase from "firebase";
+import * as Permissions from "expo-permissions";
+import * as Location from "expo-location";
 
 
 const TabNavigator = createBottomTabNavigator({
@@ -33,6 +35,8 @@ const AppContainer = createAppContainer(TabNavigator);
 
 
 export default class App extends React.Component {
+
+
 
   UNSAFE_componentWillMount() {
     const firebaseConfig = {

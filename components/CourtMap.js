@@ -1,9 +1,11 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, Button, SafeAreaView } from 'react-native';
+import {Text, View, StyleSheet, Button, SafeAreaView, FlatList} from 'react-native';
 import Constants from 'expo-constants';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
+import firebase from "firebase";
+import CourtListItem from "./CourtListItem";
 
 export default class CourtMap extends React.Component {
     mapViewRef = React.createRef();
@@ -14,6 +16,7 @@ export default class CourtMap extends React.Component {
         userMarkerCoordinates: [],
         selectedCoordinate: null,
         selectedAddress: null,
+        courts: {},
     };
 
     getLocationPermission = async () => {
@@ -22,7 +25,14 @@ export default class CourtMap extends React.Component {
     };
 
     componentDidMount = async () => {
+        await firebase
+            .database()
+            .ref('/courts')
+            .on('value', snapshot => {
+                this.setState({ courts: snapshot.val() });
+            });
         await this.getLocationPermission();
+        await this.updateLocation();
     };
 
     updateLocation = async () => {
@@ -69,16 +79,29 @@ export default class CourtMap extends React.Component {
         return (
             <View>
                 <Button title="update location" onPress={this.updateLocation} />
-                {currentLocation && (
-                    <Text>
-                        {`${currentLocation.latitude}, ${
-                            currentLocation.longitude
-                        } accuracy:${currentLocation.accuracy}`}
-                    </Text>
-                )}
             </View>
         );
     };
+
+
+    mapMarkers = () => {
+
+        const { courts } = this.state;
+
+        console.log("hejhej +" + courts)
+
+        const courtArray = Object.values(courts)
+
+        console.log(courtArray)
+
+        return courts.map((court) => <Marker
+            key={court.address}
+            coordinate={{ latitude: court.latitude, longitude: court.longitude }}
+            title={court.name}
+            description={court.type}
+        >
+        </Marker >)
+    }
 
     render() {
         const {
@@ -89,27 +112,26 @@ export default class CourtMap extends React.Component {
         return (
             <SafeAreaView style={styles.container}>
                 {this.renderCurrentLocation()}
+
                 <MapView
                     provider="google"
                     style={styles.map}
                     ref={this.mapViewRef}
                     showsUserLocation
-                    onLongPress={this.handleLongPress}>
+                    onLongPress={this.handleLongPress}
+                    initialRegion={{
+                    latitude: 55.7,
+                    longitude: 12.3,
+                    latitudeDelta: 0.3,
+                    longitudeDelta: 0.3}}>
+                    {this.mapMarkers()}
+
                     <Marker
                         coordinate={{ latitude: 55.676195, longitude: 12.569419 }}
                         title="Rådhuspladsen"
                         description="blablabal"
                     />
-                    <Marker
-                        coordinate={{ latitude: 55.673035, longitude: 12.568756 }}
-                        title="Tivoli"
-                        description="blablabal"
-                    />
-                    <Marker
-                        coordinate={{ latitude: 55.674082, longitude: 12.598108 }}
-                        title="Christiania"
-                        description="blablabal"
-                    />
+
                     {userMarkerCoordinates.map((coordinate, index) => (
                         <Marker
                             coordinate={coordinate}
@@ -118,6 +140,9 @@ export default class CourtMap extends React.Component {
                         />
                     ))}
                 </MapView>
+
+
+
                 {selectedCoordinate && (
                     <View style={styles.infoBox}>
                         <Text style={styles.infoText}>
