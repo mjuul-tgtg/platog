@@ -1,14 +1,13 @@
 import * as React from 'react';
 import {
-    View,
     Text,
-    FlatList,
     StyleSheet,
     TouchableOpacity,
 } from 'react-native';
 
 const styles = StyleSheet.create({
     container: {
+        backgroundColor: '#008340',
         flex: 1,
         borderWidth: 1,
         margin: 5,
@@ -16,7 +15,11 @@ const styles = StyleSheet.create({
         height: 50,
         justifyContent:'center'
     },
-    label: { fontWeight: 'bold' },
+    label: {
+        fontWeight: 'bold',
+        color: '#ffffff',
+        textAlign: 'center',
+    },
 });
 
 export default class CourtListItem extends React.Component {
@@ -62,10 +65,12 @@ export default class CourtListItem extends React.Component {
     render() {
         const { court } = this.props;
 
+        const { distance } = this.state;
+
         return (
             <TouchableOpacity style={styles.container} onPress={this.handlePress}>
                 <Text style={styles.label}>
-                    {court.name} - {court.city} - {this.state.distance}
+                    {court.name} - {distance}
                 </Text>
             </TouchableOpacity>
         );

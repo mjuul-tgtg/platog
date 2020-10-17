@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         paddingTop: Constants.statusBarHeight,
-        backgroundColor: '#ecf0f1',
+        backgroundColor: '#ffffff',
         padding: 8,
     },
     row: {
@@ -35,16 +35,26 @@ const styles = StyleSheet.create({
         fontSize: 30,
         textAlign: 'center', // <-- the magic
         fontWeight: 'bold',
-        paddingTop: 10
+        paddingTop: 10,
+        color:'#008340'
+    },
+    infoTextSmall: {
+        fontSize: 15,
+        textAlign: 'center', // <-- the magic
+        fontWeight: 'bold',
+        paddingTop: 10,
+        color:'#008340'
     },
     map: {flex: 10},
-    label: {fontWeight: 'bold', width: 100},
+    label: {fontWeight: 'bold',
+            width: 100,
+            color: '#008340'},
     input: {borderWidth: 1, flex: 1},
     buttonStyle: {
         marginHorizontal: 10,
         marginTop: 5,
         flex: 1,
-        backgroundColor: 'white'
+        backgroundColor: '#008340'
     }
 });
 
@@ -109,8 +119,6 @@ export default class AddCourt extends React.Component {
         let latitude = selectedCoordinate.latitude;
         let longitude = selectedCoordinate.longitude;
         let verified = false;
-
-        console.log("address: " + address)
 
         try {
             const reference = firebase
@@ -209,7 +217,7 @@ export default class AddCourt extends React.Component {
                 <Text style={styles.infoText}>Add new court</Text>
 
 
-                <Text>1. Press at the new courts location</Text>
+                <Text style={styles.infoTextSmall}>1. Select at the new courts location</Text>
 
                 <MapView
                     provider="google"
@@ -266,7 +274,7 @@ export default class AddCourt extends React.Component {
                     )}
 
 
-                    <Text>2. Fill out the necessary fields</Text>
+                    <Text style={styles.infoTextSmall}>2. Fill out the necessary fields</Text>
 
                     <View style={styles.row}>
                         <Text style={styles.label}>Name</Text>
@@ -295,6 +303,7 @@ export default class AddCourt extends React.Component {
 
                     <Text style={styles.label}>   Tags:{"\n"} </Text>
                     <TagSelect
+                        theme={'success'}
                         style={styles.input}
                         data={tags}
                         ref={(tag) => {
@@ -304,10 +313,10 @@ export default class AddCourt extends React.Component {
 
                     <View style={{ flexDirection:"row" }}>
                         <View style={styles.buttonStyle}>
-                            <Button title="Add Court" onPress={this.handleSave}/>
+                            <Button color={'#ffffff'} title="Add Court" onPress={this.handleSave}/>
                         </View>
                         <View style={styles.buttonStyle}>
-                            <Button title="Clear input" onPress={this.handleClearInput}/>
+                            <Button color={'#ffffff'} title="Clear input" onPress={this.handleClearInput}/>
                         </View>
                     </View>
 

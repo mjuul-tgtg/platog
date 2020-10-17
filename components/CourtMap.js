@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Text, View, StyleSheet, Button, SafeAreaView, FlatList} from 'react-native';
+import {Text, View, StyleSheet, Button, SafeAreaView, FlatList, TouchableOpacity} from 'react-native';
 import Constants from 'expo-constants';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
@@ -77,7 +77,12 @@ export default class CourtMap extends React.Component {
         }
         return (
             <View>
-                <Button title="update location" onPress={this.updateLocation} />
+                <TouchableOpacity
+                    style={styles.screenButton}
+                    onPress={this.updateLocation}
+                    underlayColor='#fff'>
+                    <Text style={styles.buttonText}>Update location</Text>
+                </TouchableOpacity>
             </View>
         );
     };
@@ -88,7 +93,7 @@ export default class CourtMap extends React.Component {
         const { courts } = this.state;
         const courtArray = Object.values(courts)
         return courtArray.map((court) => <Marker
-            pinColor={"green"}
+            pinColor={'#008340'}
             key={court.address}
             coordinate={{ latitude: court.latitude, longitude: court.longitude }}
             title={court.name}
@@ -153,7 +158,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         paddingTop: Constants.statusBarHeight,
-        backgroundColor: '#ecf0f1',
+        backgroundColor: '#FFFFFF',
         padding: 8,
     },
     map: { flex: 1 },
@@ -171,4 +176,23 @@ const styles = StyleSheet.create({
     infoText: {
         fontSize: 20,
     },
+    screenButton:{
+        marginRight:40,
+        marginLeft:40,
+        marginBottom:10,
+        marginTop:10,
+        paddingTop:10,
+        paddingBottom:10,
+        backgroundColor:'#008340',
+        borderRadius:10,
+        borderWidth: 1,
+        borderColor: '#fff'
+    },
+    buttonText:{
+        color:'#fff',
+        textAlign:'center',
+        paddingLeft : 10,
+        paddingRight : 10,
+        fontSize: 20
+    }
 });

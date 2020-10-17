@@ -53,30 +53,6 @@ export default class CourtDetails extends React.Component {
         navigation.navigate('Editcourt', { id });
     };
 
-    confirmDelete = () => {
-        Alert.alert('Are you sure?', 'Do you want to delete the court?', [
-            { text: 'Cancel', style: 'cancel' },
-            // Vi bruger this.handleDelete som eventHandler til onPress
-            { text: 'Delete', style: 'destructive', onPress: this.handleDelete },
-        ]);
-    };
-
-    // Vi spørger brugeren om han er sikker
-
-
-    // Vi sletter den aktuelle bil
-    handleDelete = () => {
-        const { navigation } = this.props;
-        const id = navigation.getParam('id');
-        try {
-            firebase.database().ref(`/courts/${id}`).remove();
-            navigation.goBack();
-        } catch (error) {
-            Alert.alert(error.message);
-        }
-
-
-    };
 
     handleTags = tags => {
         return tags.sort().map(item => item).join(', ');
@@ -84,8 +60,6 @@ export default class CourtDetails extends React.Component {
 
     render() {
         const { court } = this.state;
-
-        console.log(court)
 
         if (!court) {
             return <Text>No data</Text>;

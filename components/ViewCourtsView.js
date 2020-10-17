@@ -13,14 +13,23 @@ const ListStackNavigator = createStackNavigator(
         CourtList: {
             screen: CourtList,
             navigationOptions:
-                {title: "List View"}
+                {
+                    title: "List View",
+                    headerShown: false
+                }
         },
-        CourtDetails: {screen: CourtDetails,
+        CourtDetails: {
+            screen: CourtDetails,
             navigationOptions:
                 {title: "Details"}
         },
     },
-    {initialRouteKey: 'CourtList'},
+    {
+        initialRouteKey: 'CourtList',
+        defaultNavigationOptions: {
+            cardStyle: {backgroundColor: '#FFFFFF'},
+        }
+    },
 );
 
 const ListContainer = createAppContainer(ListStackNavigator);
@@ -30,14 +39,23 @@ const MapStackNavigator = createStackNavigator(
         CourtList: {
             screen: CourtMap,
             navigationOptions:
-                {title: "Map View"}
+                {
+                    title: "Map View",
+                    headerShown: false
+                }
         },
-        CourtDetails: {screen: CourtDetails,
+        CourtDetails: {
+            screen: CourtDetails,
             navigationOptions:
                 {title: "Details"}
         },
     },
-    {initialRouteKey: 'CourtList'},
+    {
+        initialRouteKey: 'CourtList',
+        defaultNavigationOptions: {
+            cardStyle: {backgroundColor: '#FFFFFF'},
+        }
+    },
 );
 
 const MapContainer = createAppContainer(MapStackNavigator);
@@ -72,7 +90,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         paddingTop: Constants.statusBarHeight,
-        backgroundColor: '#ecf0f1',
+        backgroundColor: '#ffffff',
         padding: 0,
     },
     map: {flex: 1},

@@ -1,15 +1,12 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
 import { AntDesign } from '@expo/vector-icons';
 import AddCourt from "./components/AddCourt";
 import ViewCourtScreen from "./components/ViewCourtScreen";
 import firebase from "firebase";
-import * as Permissions from "expo-permissions";
-import * as Location from "expo-location";
+
 
 
 const TabNavigator = createBottomTabNavigator({
@@ -17,7 +14,7 @@ const TabNavigator = createBottomTabNavigator({
     navigationOptions: {
       tabBarLabel:"View Courts",
       tabBarIcon: ({ tintColor }) => (
-          <AntDesign name="user" size={24} color={tintColor} />
+          <AntDesign name="find" size={24} color={tintColor} />
       )
     },
   },
@@ -25,7 +22,7 @@ const TabNavigator = createBottomTabNavigator({
     navigationOptions: {
       tabBarLabel:"Add Court",
       tabBarIcon: ({ tintColor }) => (
-          <AntDesign name="google" size={24} color={tintColor} />
+          <AntDesign name="plus" size={24} color={tintColor} />
       )
     },
   },
@@ -61,13 +58,3 @@ export default class App extends React.Component {
     return <AppContainer/>;
   }
 }
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
