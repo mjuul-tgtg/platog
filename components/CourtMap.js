@@ -5,7 +5,6 @@ import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import firebase from "firebase";
-import CourtListItem from "./CourtListItem";
 
 export default class CourtMap extends React.Component {
     mapViewRef = React.createRef();
@@ -25,7 +24,7 @@ export default class CourtMap extends React.Component {
     };
 
     componentDidMount = async () => {
-        await firebase
+        firebase
             .database()
             .ref('/courts')
             .on('value', snapshot => {
@@ -87,20 +86,13 @@ export default class CourtMap extends React.Component {
     mapMarkers = () => {
 
         const { courts } = this.state;
-
-        console.log("hejhej +" + courts)
-
         const courtArray = Object.values(courts)
-
-        console.log(courtArray)
-
-        return courts.map((court) => <Marker
+        return courtArray.map((court) => <Marker
+            pinColor={"green"}
             key={court.address}
             coordinate={{ latitude: court.latitude, longitude: court.longitude }}
             title={court.name}
-            description={court.type}
-        >
-        </Marker >)
+            description={court.type}/>)
     }
 
     render() {
@@ -109,6 +101,8 @@ export default class CourtMap extends React.Component {
             selectedCoordinate,
             selectedAddress,
         } = this.state;
+
+
         return (
             <SafeAreaView style={styles.container}>
                 {this.renderCurrentLocation()}
@@ -121,17 +115,10 @@ export default class CourtMap extends React.Component {
                     onLongPress={this.handleLongPress}
                     initialRegion={{
                     latitude: 55.7,
-                    longitude: 12.3,
-                    latitudeDelta: 0.3,
-                    longitudeDelta: 0.3}}>
+                    longitude: 12.55,
+                    latitudeDelta: 0.22,
+                    longitudeDelta: 0.22}}>
                     {this.mapMarkers()}
-
-                    <Marker
-                        coordinate={{ latitude: 55.676195, longitude: 12.569419 }}
-                        title="Rådhuspladsen"
-                        description="blablabal"
-                    />
-
                     {userMarkerCoordinates.map((coordinate, index) => (
                         <Marker
                             coordinate={coordinate}

@@ -85,10 +85,11 @@ export default class CourtDetails extends React.Component {
     render() {
         const { court } = this.state;
 
+        console.log(court)
+
         if (!court) {
             return <Text>No data</Text>;
         }
-
 
     return (
             <View style={styles.container}>

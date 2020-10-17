@@ -48,7 +48,7 @@ export default class ViewCourtsView extends React.Component {
 
     render() {
 
-        const {enableMapView, currentLocation} = this.props
+        const {enableMapView} = this.props
 
 
         if (enableMapView) {

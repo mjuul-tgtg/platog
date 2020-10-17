@@ -6,8 +6,6 @@ import {
     StyleSheet,
     TouchableOpacity,
 } from 'react-native';
-import {getDistance, getPreciseDistance} from 'geolib';
-import firebase from "firebase";
 
 const styles = StyleSheet.create({
     container: {

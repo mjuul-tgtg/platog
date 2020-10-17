@@ -27,6 +27,8 @@ export default class CourtList extends React.Component {
     };
 
     handleSelectCourt = id => {
+
+        console.log("ID: " + id)
         this.props.navigation.navigate('CourtDetails', { id });
     };
 
@@ -56,15 +58,30 @@ export default class CourtList extends React.Component {
     calculateDistances = () => {
 
         const { courts, currentLocation } = this.state;
-
         const courtArray = Object.values(courts)
 
+        const courtKeys = Object.keys(courts);
+
+        console.log(courtKeys)
+
+        console.log(courtKeys[0])
+
+        let loopCount = 0;
         courtArray.forEach(court => {
-            let dis = getDistance(
-                {latitude: court.latitude, longitude: court.longitude},
-                {latitude: currentLocation.latitude, longitude: currentLocation.longitude},
-            );
-            court.distance = dis
+            try {
+                let dis = getDistance(
+                    {latitude: court.latitude, longitude: court.longitude},
+                    {latitude: currentLocation.latitude, longitude: currentLocation.longitude},
+                );
+                court.distance = dis
+                court.key = courtKeys[loopCount]
+            } catch (e) {
+                court.key = courtKeys[loopCount]
+                court.distance = "Could not calculate distance"
+            }
+
+            loopCount = loopCount + 1
+
         })
         courtArray.sort(this.dynamicSort("distance"))
         this.setState({courts:courtArray})
@@ -93,7 +110,7 @@ export default class CourtList extends React.Component {
                     renderItem={({ item, index }) => (
                         <CourtListItem
                             court={item}
-                            id={courtKeys[index]}
+                            id={item.key}
                             onSelect={this.handleSelectCourt}
                         />
                     )}
