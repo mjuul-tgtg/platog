@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
         margin: 5,
         padding: 5,
         height: 50,
-        justifyContent:'center'
+        justifyContent: 'center'
     },
     label: {
         fontWeight: 'bold',
@@ -39,33 +39,34 @@ export default class CourtListItem extends React.Component {
         onSelect(id)
     };
 
-    addDistance = () => {
+    addDistance = async () => {
 
-        const { court } = this.props;
+        const {court} = this.props;
 
         let dis = court.distance
 
-        if(dis==null){
-            this.setState({distance:"Calculating distance..."})
+        if (dis == null) {
+            this.setState({distance: "Calculating distance..."})
             return;
         }
 
         let dis_text = dis + " m"
 
         if (dis > 1000) {
-             dis = dis / 1000
-             dis = dis.toFixed(2)
-             dis_text = dis + " km"
+            dis = dis / 1000
+            dis = dis.toFixed(2)
+            dis_text = dis + " km"
         }
 
-        this.setState({distance:dis_text})
+        this.setState({distance: dis_text})
+
     };
 
 
     render() {
-        const { court } = this.props;
+        const {court} = this.props;
 
-        const { distance } = this.state;
+        const {distance} = this.state;
 
         return (
             <TouchableOpacity style={styles.container} onPress={this.handlePress}>

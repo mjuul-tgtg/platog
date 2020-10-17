@@ -8,7 +8,7 @@ import {
     Alert,
     ScrollView,
     SafeAreaView,
-    Switch
+    Switch, ActivityIndicator, TouchableOpacity
 } from 'react-native';
 import firebase from 'firebase';
 import MapView, {Marker} from "react-native-maps";
@@ -32,7 +32,6 @@ export default class AddCourt extends React.Component {
         selectedAddressConfirmed: false
     };
 
-
     toggleSwitch = () => {
 
         const {publicFree} = this.state;
@@ -48,7 +47,6 @@ export default class AddCourt extends React.Component {
 
     handleConfirmLocation = () => this.setState({selectedAddressConfirmed: true});
 
-
     handleClearInput = () => {
         this.setState({
             name: '',
@@ -56,7 +54,6 @@ export default class AddCourt extends React.Component {
             type: '',
             tags: '',
             hasLocationPermission: null,
-            currentLocation: null,
             userMarkerCoordinates: [],
             selectedCoordinate: null,
             selectedAddress: null,
@@ -86,7 +83,7 @@ export default class AddCourt extends React.Component {
         let verified = false;
 
         try {
-            const reference = firebase
+            firebase
                 .database()
                 .ref('/courts/')
                 .push({
@@ -104,24 +101,12 @@ export default class AddCourt extends React.Component {
                     images
                 });
             Alert.alert(`Saved`);
-            this.setState({
-                name: '',
-                publicFree: false,
-                type: '',
-                tags: '',
-                hasLocationPermission: null,
-                currentLocation: null,
-                userMarkerCoordinates: [],
-                selectedCoordinate: null,
-                selectedAddress: null,
-                images: "https://ollocal.com/custom/domain_1/image_files/sitemgr_photo_2958.jpg",
-            });
+            this.handleClearInput();
         } catch (error) {
             Alert.alert(`Error: ${error.message}`);
         }
 
     };
-
 
     getLocationPermission = async () => {
         const {status} = await Permissions.askAsync(Permissions.LOCATION);
@@ -153,11 +138,19 @@ export default class AddCourt extends React.Component {
         });
     };
 
+    useCurrentLocation = () => {
+        const {currentLocation} = this.state
+        this.setState({selectedCoordinate: currentLocation})
+        this.findAddress(currentLocation)
+        this.setState({
+            userMarkerCoordinates: [currentLocation],
+        })
+    }
+
     findAddress = async coordinate => {
         const [selectedAddress] = await Location.reverseGeocodeAsync(coordinate);
         this.setState({selectedAddress});
     };
-
 
     render() {
         const {
@@ -167,6 +160,7 @@ export default class AddCourt extends React.Component {
             userMarkerCoordinates,
             selectedAddress,
             selectedAddressConfirmed,
+            currentLocation,
         } = this.state;
 
         const tags = [
@@ -177,6 +171,15 @@ export default class AddCourt extends React.Component {
             {id: 5, label: 'Skateboard'},
         ];
 
+        if (currentLocation == null) {
+            return (
+                <View style={styles.loadingContainer}>
+                    <Text style={styles.loadingText}>Getting ready...</Text>
+                    <ActivityIndicator size="large" color="#008340"/>
+                </View>
+            )
+        }
+
 
         return (
 
@@ -184,8 +187,20 @@ export default class AddCourt extends React.Component {
                 <Text style={styles.infoText}>Add new court</Text>
 
                 {!selectedAddressConfirmed && (
+
                     <Text style={styles.infoTextSmall}>1. Select the new courts location</Text>
                 )}
+
+                {!selectedAddressConfirmed && (
+                    <TouchableOpacity
+                        style={styles.screenButton}
+                        onPress={this.useCurrentLocation}
+                        underlayColor='#fff'>
+                        <Text style={styles.buttonText}>Use current location</Text>
+                    </TouchableOpacity>
+                )}
+
+
                 {!selectedAddressConfirmed && (
                     <MapView
                         provider="google"
@@ -194,12 +209,13 @@ export default class AddCourt extends React.Component {
                         showsUserLocation
                         onPress={this.handlePress}
                         initialRegion={{
-                            latitude: 55.7,
-                            longitude: 12.55,
-                            latitudeDelta: 0.22,
-                            longitudeDelta: 0.22
+                            latitude: currentLocation.latitude,
+                            longitude: currentLocation.longitude,
+                            latitudeDelta: 0.1,
+                            longitudeDelta: 0.1
                         }}
                     >
+
                         {userMarkerCoordinates.map((coordinate, index) => (
                             <Marker
                                 coordinate={coordinate}
@@ -243,10 +259,10 @@ export default class AddCourt extends React.Component {
                     )}
 
                     {selectedAddress && !selectedAddressConfirmed && (
-                            <View style={styles.buttonStyle}>
-                                <Button color={'#ffffff'} title="Confirm location"
-                                        onPress={this.handleConfirmLocation}/>
-                            </View>
+                        <View style={styles.buttonStyle}>
+                            <Button color={'#ffffff'} title="Confirm location"
+                                    onPress={this.handleConfirmLocation}/>
+                        </View>
                     )}
 
                     {selectedAddressConfirmed && (
@@ -256,37 +272,37 @@ export default class AddCourt extends React.Component {
                     {selectedAddressConfirmed && (
 
                         <View style={styles.row}>
-                        <Text style={styles.label}>Name</Text>
-                        <TextInput
-                            value={name}
-                            onChangeText={this.handleNameChange}
-                            style={styles.input}
-                        />
-                    </View>
+                            <Text style={styles.label}>Name</Text>
+                            <TextInput
+                                value={name}
+                                onChangeText={this.handleNameChange}
+                                style={styles.input}
+                            />
+                        </View>
                     )}
 
 
                     {selectedAddressConfirmed && (
 
                         <View style={styles.row}>
-                        <Text style={styles.label}>Public</Text>
-                        <Switch
-                            onValueChange={this.toggleSwitch}
-                            value={publicFree}
-                        />
-                    </View>
+                            <Text style={styles.label}>Public</Text>
+                            <Switch
+                                onValueChange={this.toggleSwitch}
+                                value={publicFree}
+                            />
+                        </View>
                     )}
 
                     {selectedAddressConfirmed && (
 
                         <View style={styles.row}>
-                        <Text style={styles.label}>Type</Text>
-                        <TextInput
-                            value={type}
-                            onChangeText={this.handleTypeChange}
-                            style={styles.input}
-                        />
-                    </View>
+                            <Text style={styles.label}>Type</Text>
+                            <TextInput
+                                value={type}
+                                onChangeText={this.handleTypeChange}
+                                style={styles.input}
+                            />
+                        </View>
                     )}
 
                     {selectedAddressConfirmed && (
@@ -295,24 +311,24 @@ export default class AddCourt extends React.Component {
                     {selectedAddressConfirmed && (
 
                         <TagSelect
-                        theme={'success'}
-                        style={styles.input}
-                        data={tags}
-                        ref={(tag) => {
-                            this.tag = tag;
-                        }}
-                    />
-                        )}
+                            theme={'success'}
+                            style={styles.input}
+                            data={tags}
+                            ref={(tag) => {
+                                this.tag = tag;
+                            }}
+                        />
+                    )}
 
                     {selectedAddressConfirmed && (
                         <View style={{flexDirection: "row"}}>
                             <View style={styles.buttonStyle}>
-                            <Button color={'#ffffff'} title="Add Court" onPress={this.handleSave}/>
+                                <Button color={'#ffffff'} title="Add Court" onPress={this.handleSave}/>
+                            </View>
+                            <View style={styles.buttonStyle}>
+                                <Button color={'#ffffff'} title="Clear input" onPress={this.handleClearInput}/>
+                            </View>
                         </View>
-                        <View style={styles.buttonStyle}>
-                            <Button color={'#ffffff'} title="Clear input" onPress={this.handleClearInput}/>
-                        </View>
-                    </View>
                     )}
 
                 </ScrollView>
@@ -349,7 +365,7 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         color: '#008340'
     },
-    map: {flex: 10},
+    map: {flex: 1000},
     label: {
         fontWeight: 'bold',
         width: 100,
@@ -361,5 +377,36 @@ const styles = StyleSheet.create({
         marginTop: 5,
         flex: 1,
         backgroundColor: '#008340'
+    },
+    loadingText: {
+        fontSize: 30,
+        textAlign: 'center', // <-- the magic
+        fontWeight: 'bold',
+        paddingTop: 10,
+        color: '#008340'
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    screenButton: {
+        marginRight: 40,
+        marginLeft: 40,
+        marginBottom: 10,
+        marginTop: 10,
+        paddingTop: 10,
+        paddingBottom: 10,
+        backgroundColor: '#ff8340',
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#fff'
+    },
+    buttonText: {
+        color: '#fff',
+        textAlign: 'center',
+        paddingLeft: 10,
+        paddingRight: 10,
+        fontSize: 20
     }
 });

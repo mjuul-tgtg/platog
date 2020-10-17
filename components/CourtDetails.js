@@ -1,40 +1,20 @@
-
 import * as React from 'react';
-import { View, Text, FlatList, StyleSheet, Button, Alert, Image, Linking } from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    Image,
+    Linking,
+    TouchableOpacity
+} from 'react-native';
 import firebase from 'firebase';
-import { YellowBox } from 'react-native';
-import _ from 'lodash';
 
-YellowBox.ignoreWarnings(['Setting a timer']);
-const _console = _.clone(console);
-console.warn = message => {
-    if (message.indexOf('Setting a timer') <= -1) {
-        _console.warn(message);
-    }
-};
-const styles = StyleSheet.create({
-    container: { flex: 1, justifyContent: 'flex-start' },
-    row: {
-        margin: 5,
-        padding: 5,
-        flexDirection: 'row',
-    },
-    label: { width: 100, fontWeight: 'bold' },
-    value: { flex: 1 },
-    courtCover: {
-        flex: 1,
-        width: null,
-        height: null,
-        resizeMode: 'contain'
-    },
-});
 
 export default class CourtDetails extends React.Component {
-    state = { court: null };
+    state = {court: null};
 
 
     componentDidMount() {
-        // Vi udlæser ID fra navgation parametre og loader bilen når komponenten starter
         const id = this.props.navigation.getParam('id');
         this.loadcourt(id);
     }
@@ -42,30 +22,22 @@ export default class CourtDetails extends React.Component {
     loadcourt = id => {
         firebase
             .database().ref(`/courts/${id}`).on('value', snapshot => {
-            this.setState({ court: snapshot.val() });
+            this.setState({court: snapshot.val()});
         });
     };
-
-    handleEdit = () => {
-        // Vi navigerer videre til Editcourt skærmen og sender ID med
-        const { navigation } = this.props;
-        const id = navigation.getParam('id');
-        navigation.navigate('Editcourt', { id });
-    };
-
 
     handleTags = tags => {
         return tags.sort().map(item => item).join(', ');
     }
 
     render() {
-        const { court } = this.state;
+        const {court} = this.state;
 
         if (!court) {
             return <Text>No data</Text>;
         }
 
-    return (
+        return (
             <View style={styles.container}>
                 <Image
                     style={styles.courtCover}
@@ -79,7 +51,8 @@ export default class CourtDetails extends React.Component {
                 </View>
                 <View style={styles.row}>
                     <Text style={styles.label}>Address</Text>
-                    <Text style={{color:"blue"}} onPress={() => Linking.openURL("https://www.google.com/maps/place/" + court.address)}>{court.address}</Text>
+                    <Text style={{color: "blue"}}
+                          onPress={() => Linking.openURL("https://www.google.com/maps/place/" + court.address)}>{court.address}</Text>
                 </View>
                 <View style={styles.row}>
                     <Text style={styles.label}>Postal</Text>
@@ -97,7 +70,57 @@ export default class CourtDetails extends React.Component {
                     <Text style={styles.label}>Tags</Text>
                     <Text style={styles.value}>{this.handleTags(court.tags)}</Text>
                 </View>
+
+                <TouchableOpacity
+                    style={styles.screenButton}
+                    onPress={this.changeToMapView}
+                    underlayColor='#fff'>
+                    <Text style={styles.buttonText}>Check in</Text>
+                </TouchableOpacity>
+
+
             </View>
         );
     }
 }
+
+
+const styles = StyleSheet.create({
+    container: {flex: 1, justifyContent: 'flex-start'},
+    row: {
+        margin: 5,
+        padding: 5,
+        flexDirection: 'row',
+    },
+    label: {
+        fontWeight: 'bold',
+        width: 100,
+        color: '#008340'
+    },
+    value: {flex: 1},
+    courtCover: {
+        flex: 1,
+        width: null,
+        height: null,
+        resizeMode: 'contain'
+    },
+    screenButton: {
+        marginRight: 40,
+        marginLeft: 40,
+        marginBottom: 10,
+        marginTop: 10,
+        paddingTop: 10,
+        paddingBottom: 10,
+        backgroundColor: '#008340',
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#fff'
+    },
+    buttonText: {
+        color: '#fff',
+        textAlign: 'center',
+        paddingLeft: 10,
+        paddingRight: 10,
+        fontSize: 20
+    }
+});
