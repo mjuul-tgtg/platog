@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Text, View, StyleSheet, Button, SafeAreaView, FlatList, TouchableOpacity} from 'react-native';
+import {Text, View, StyleSheet, SafeAreaView, TouchableOpacity} from 'react-native';
 import Constants from 'expo-constants';
 import MapView, {Marker} from 'react-native-maps';
 import * as Location from 'expo-location';
