@@ -33,11 +33,8 @@ export default class AddCourt extends React.Component {
     };
 
     toggleSwitch = () => {
-
         const {publicFree} = this.state;
-
         let newState = !publicFree
-
         this.setState({publicFree: newState})
     };
 

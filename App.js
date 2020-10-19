@@ -82,8 +82,7 @@ export default class App extends React.Component {
             measurementId: "G-F3V1CGE5VL"
         };
 
-        // Vi kontrollerer at der ikke allerede er en initialiseret instans af firebase
-        // Så undgår vi fejlen Firebase App named '[DEFAULT]' already exists (app/duplicate-app).
+        // Vi tjekker om firebase allerde er initialised
         if (firebase.apps.length === 0) {
             firebase.initializeApp(firebaseConfig);
         }
