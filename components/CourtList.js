@@ -26,15 +26,9 @@ export default class CourtList extends React.Component {
 
         const {currentLocation} = this.state;
 
-        this.setState({courts: {}, courtsSorted: false})
+        this.setState({courtsSorted: false})
 
-
-        firebase
-            .database()
-            .ref('/courts')
-            .on('value', snapshot => {
-                this.setState({courts: snapshot.val()});
-            });
+        await this.getCourtsFromFirebase();
 
         await this.getLocationPermission();
 
@@ -44,8 +38,16 @@ export default class CourtList extends React.Component {
         }
     };
 
-    handleSelectCourt = id => {
+    getCourtsFromFirebase = async () => {
+        await firebase
+            .database()
+            .ref('/courts')
+            .once('value', snapshot => {
+                this.setState({courts: snapshot.val()});
+            });
+    }
 
+    handleSelectCourt = id => {
         this.props.navigation.navigate('CourtDetails', {id});
     };
 
@@ -56,7 +58,9 @@ export default class CourtList extends React.Component {
 
     updateLocation = async () => {
         const {coords} = await Location.getCurrentPositionAsync();
-        this.setState({currentLocation: coords})
+        await this.setState({currentLocation: coords, courtsSorted: false})
+        await this.getCourtsFromFirebase();
+        this.calculateDistances();
     };
 
     //https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value
@@ -99,11 +103,15 @@ export default class CourtList extends React.Component {
             loopCount = loopCount + 1
 
         })
-        courtArray.sort(this.dynamicSort("distance"))
-        this.setState({
-            courts: courtArray,
-            courtsSorted: true
-        })
+
+        if (loopCount > 0) {
+            courtArray.sort(this.dynamicSort("distance"))
+            this.setState({
+                courts: courtArray,
+                courtsSorted: true
+            })
+        }
+
     };
 
 
@@ -129,6 +137,7 @@ export default class CourtList extends React.Component {
 
 
     render() {
+
         const {courts, courtsSorted} = this.state;
 
         // Vi viser ingenting hvis der ikke findes nogen courts
@@ -139,7 +148,9 @@ export default class CourtList extends React.Component {
                 </View>)
         }
 
+
         // Vi viser "loading" hvis courts ikke er blevet sortered endnu
+
         if (!courtsSorted) {
             return (
                 <View style={styles.loadingContainer}>
