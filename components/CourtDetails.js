@@ -16,10 +16,12 @@ export default class CourtDetails extends React.Component {
 
     componentDidMount() {
         const id = this.props.navigation.getParam('id');
-        this.loadcourt(id);
+        this.loadCourt(id);
     }
 
-    loadcourt = id => {
+    loadCourt = id => {
+
+        console.log(id)
         firebase
             .database().ref(`/courts/${id}`).on('value', snapshot => {
             this.setState({court: snapshot.val()});
@@ -32,6 +34,8 @@ export default class CourtDetails extends React.Component {
 
     render() {
         const {court} = this.state;
+
+        console.log(court)
 
         if (!court) {
             return <Text>No data</Text>;

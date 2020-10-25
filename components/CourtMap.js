@@ -1,10 +1,11 @@
 import * as React from 'react';
-import {Text, View, StyleSheet, SafeAreaView, TouchableOpacity} from 'react-native';
+import {Text, View, StyleSheet, SafeAreaView, TouchableOpacity, ActivityIndicator} from 'react-native';
 import Constants from 'expo-constants';
-import MapView, {Marker} from 'react-native-maps';
+import MapView, {Marker, Callout, CalloutSubview} from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import firebase from "firebase";
+
 
 export default class CourtMap extends React.Component {
     mapViewRef = React.createRef();
@@ -16,6 +17,7 @@ export default class CourtMap extends React.Component {
         selectedCoordinate: null,
         selectedAddress: null,
         courts: {},
+        readyToRender: false
     };
 
     getLocationPermission = async () => {
@@ -25,14 +27,15 @@ export default class CourtMap extends React.Component {
 
     componentDidMount = async () => {
 
+        await this.getLocationPermission();
+        await this.updateLocation();
         firebase
             .database()
             .ref('/courts')
             .on('value', snapshot => {
-                this.setState({courts: snapshot.val()});
+                this.setState({courts: snapshot.val(), readyToRender: false});
             });
-        await this.getLocationPermission();
-        await this.updateLocation();
+        await this.addKeyToCourt();
     };
 
     updateLocation = async () => {
@@ -46,19 +49,28 @@ export default class CourtMap extends React.Component {
         });
     };
 
-    findAddress = async coordinate => {
-        const [selectedAddress] = await Location.reverseGeocodeAsync(coordinate);
-        this.setState({selectedAddress});
+    addKeyToCourt = () => {
+
+        const {courts} = this.state;
+
+        const courtArray = Object.values(courts)
+        const courtKeys = Object.keys(courts);
+
+        let loopCount = 0;
+        courtArray.forEach(court => {
+            court.key = courtKeys[loopCount]
+            loopCount = loopCount + 1
+        })
+
+        if (loopCount > 0) {
+
+            this.setState({
+                courts: courtArray,
+                readyToRender: true
+            })
+        }
     };
 
-    handleSelectMarker = coordinate => {
-        this.setState({selectedCoordinate: coordinate});
-        this.findAddress(coordinate);
-    };
-
-
-    closeInfoBox = () =>
-        this.setState({selectedCoordinate: null, selectedAddress: null});
 
     renderCurrentLocation = () => {
         const {hasLocationPermission} = this.state;
@@ -84,9 +96,12 @@ export default class CourtMap extends React.Component {
         this.props.navigation.navigate('CourtList');
     }
 
+    handleSelectCourtMap =  id => {
+        console.log("blabla= " + id)
+        this.props.navigation.navigate('CourtDetails', {id});
+    };
 
     mapMarkers = () => {
-
         const {courts} = this.state;
         const courtArray = Object.values(courts)
         return courtArray.map((court) => <Marker
@@ -94,13 +109,59 @@ export default class CourtMap extends React.Component {
             key={court.address}
             coordinate={{latitude: court.latitude, longitude: court.longitude}}
             title={court.name}
-            description={court.type}/>)
+            description={court.type}
+            onPress={() => this.handleSelectCourtMap(court.key)}
+        >
+        </Marker>)
     }
 
     render() {
         const {
-            userMarkerCoordinates,
+            currentLocation,
+            readyToRender
         } = this.state;
+
+        console.log(readyToRender)
+
+        if (currentLocation == null) {
+            return (
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="large" color="#008340"/>
+                </View>
+            )
+        }
+
+        if (readyToRender) {
+            console.log("blablabla");
+            return (<SafeAreaView style={styles.container}>
+
+                <Text style={styles.infoText}>Courts near you</Text>
+
+
+                {this.renderCurrentLocation()}
+
+                <MapView
+                    provider="google"
+                    style={styles.map}
+                    ref={this.mapViewRef}
+                    showsUserLocation
+                    initialRegion={{
+                        latitude: currentLocation.latitude,
+                        longitude: currentLocation.longitude,
+                        latitudeDelta: 0.1,
+                        longitudeDelta: 0.1
+                    }}>
+                    {this.mapMarkers()}
+                </MapView>
+
+                <TouchableOpacity
+                    style={styles.screenButton}
+                    onPress={this.changeToListView}
+                    underlayColor='#fff'>
+                    <Text style={styles.buttonText}>Change to ListView</Text>
+                </TouchableOpacity>
+            </SafeAreaView>)
+        }
 
 
         return (
@@ -117,19 +178,12 @@ export default class CourtMap extends React.Component {
                     ref={this.mapViewRef}
                     showsUserLocation
                     initialRegion={{
-                        latitude: 55.7,
-                        longitude: 12.55,
-                        latitudeDelta: 0.22,
-                        longitudeDelta: 0.22
+                        latitude: currentLocation.latitude,
+                        longitude: currentLocation.longitude,
+                        latitudeDelta: 0.1,
+                        longitudeDelta: 0.1
                     }}>
                     {this.mapMarkers()}
-                    {userMarkerCoordinates.map((coordinate, index) => (
-                        <Marker
-                            coordinate={coordinate}
-                            key={index.toString()}
-                            onPress={() => this.handleSelectMarker(coordinate)}
-                        />
-                    ))}
                 </MapView>
 
                 <TouchableOpacity

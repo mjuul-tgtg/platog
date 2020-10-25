@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, Text, FlatList, ActivityIndicator, StyleSheet, TouchableOpacity, SafeAreaView} from 'react-native';
+import {ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import firebase from 'firebase';
 import CourtListItem from "./CourtListItem";
 import * as Location from "expo-location";
@@ -16,7 +16,6 @@ export default class CourtList extends React.Component {
         hasLocationPermission: null
     };
 
-
     getLocationPermission = async () => {
         const {status} = await Permissions.askAsync(Permissions.LOCATION);
         this.setState({hasLocationPermission: status});
@@ -24,7 +23,7 @@ export default class CourtList extends React.Component {
 
     componentDidMount = async () => {
 
-        const {currentLocation} = this.state;
+        const {currentLocation, courtsSorted} = this.state;
 
         this.setState({courtsSorted: false})
 
@@ -32,9 +31,8 @@ export default class CourtList extends React.Component {
 
         await this.getLocationPermission();
 
-        if (currentLocation == null) {
+        if (currentLocation == null || !courtsSorted) {
             await this.updateLocation();
-            await this.calculateDistances()
         }
     };
 
@@ -48,6 +46,7 @@ export default class CourtList extends React.Component {
     }
 
     handleSelectCourt = id => {
+        console.log("ID: " + id)
         this.props.navigation.navigate('CourtDetails', {id});
     };
 
@@ -89,11 +88,10 @@ export default class CourtList extends React.Component {
         let loopCount = 0;
         courtArray.forEach(court => {
             try {
-                let dis = getDistance(
+                court.distance = getDistance(
                     {latitude: court.latitude, longitude: court.longitude},
                     {latitude: currentLocation.latitude, longitude: currentLocation.longitude},
-                );
-                court.distance = dis
+                )
                 court.key = courtKeys[loopCount]
             } catch (e) {
                 court.key = courtKeys[loopCount]

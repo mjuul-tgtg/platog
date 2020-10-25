@@ -177,7 +177,6 @@ export default class AddCourt extends React.Component {
             )
         }
 
-
         return (
 
             <SafeAreaView style={styles.container}>
