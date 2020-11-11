@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Text, View, StyleSheet, SafeAreaView, TouchableOpacity, ActivityIndicator} from 'react-native';
 import Constants from 'expo-constants';
-import MapView, {Marker, Callout, CalloutSubview} from 'react-native-maps';
+import MapView, {Marker} from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import firebase from "firebase";
@@ -47,7 +47,7 @@ export default class CourtMap extends React.Component {
             .database()
             .ref('/courts')
             .on('value', snapshot => {
-                this.setState({courts: snapshot.val});
+                this.setState({courts: snapshot.val()});
 
                 const courtArray = Object.values(snapshot.val())
                 const courtKeys = Object.keys(snapshot.val());
@@ -129,8 +129,7 @@ export default class CourtMap extends React.Component {
         if (!readyToRender) {
             return (<SafeAreaView style={styles.container}>
 
-                <Text style={styles.infoText}>BLA</Text>
-
+                <Text style={styles.infoText}>Courts near you</Text>
 
                 {this.renderCurrentLocation()}
 
