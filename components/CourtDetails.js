@@ -5,7 +5,8 @@ import {
     StyleSheet,
     Image,
     Linking,
-    TouchableOpacity
+    TouchableOpacity,
+    Alert
 } from 'react-native';
 import firebase from 'firebase';
 
@@ -30,6 +31,10 @@ export default class CourtDetails extends React.Component {
 
     handleTags = tags => {
         return tags.sort().map(item => item).join(', ');
+    }
+
+    handleCheckIn = () => {
+        Alert.alert("You are now checked in")
     }
 
     render() {
@@ -77,7 +82,7 @@ export default class CourtDetails extends React.Component {
 
                 <TouchableOpacity
                     style={styles.screenButton}
-                    onPress={this.changeToMapView}
+                    onPress={this.handleCheckIn}
                     underlayColor='#fff'>
                     <Text style={styles.buttonText}>Check in</Text>
                 </TouchableOpacity>

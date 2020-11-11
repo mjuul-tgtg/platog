@@ -26,15 +26,8 @@ export default class CourtMap extends React.Component {
     };
 
     componentDidMount = async () => {
-
         await this.getLocationPermission();
         await this.updateLocation();
-        firebase
-            .database()
-            .ref('/courts')
-            .on('value', snapshot => {
-                this.setState({courts: snapshot.val(), readyToRender: false});
-            });
         await this.addKeyToCourt();
     };
 
@@ -50,27 +43,30 @@ export default class CourtMap extends React.Component {
     };
 
     addKeyToCourt = () => {
+        firebase
+            .database()
+            .ref('/courts')
+            .on('value', snapshot => {
+                this.setState({courts: snapshot.val});
 
-        const {courts} = this.state;
+                const courtArray = Object.values(snapshot.val())
+                const courtKeys = Object.keys(snapshot.val());
 
-        const courtArray = Object.values(courts)
-        const courtKeys = Object.keys(courts);
+                let loopCount = 0;
+                courtArray.forEach(court => {
+                    court.key = courtKeys[loopCount]
+                    loopCount = loopCount + 1
+                })
 
-        let loopCount = 0;
-        courtArray.forEach(court => {
-            court.key = courtKeys[loopCount]
-            loopCount = loopCount + 1
-        })
+                if (loopCount > 0) {
 
-        if (loopCount > 0) {
-
-            this.setState({
-                courts: courtArray,
-                readyToRender: true
-            })
-        }
+                    this.setState({
+                        courts: courtArray,
+                        readyToRender: true
+                    })
+                }
+            });
     };
-
 
     renderCurrentLocation = () => {
         const {hasLocationPermission} = this.state;
@@ -96,8 +92,7 @@ export default class CourtMap extends React.Component {
         this.props.navigation.navigate('CourtList');
     }
 
-    handleSelectCourtMap =  id => {
-        console.log("blabla= " + id)
+    handleSelectCourtMap = id => {
         this.props.navigation.navigate('CourtDetails', {id});
     };
 
@@ -109,7 +104,7 @@ export default class CourtMap extends React.Component {
             key={court.address}
             coordinate={{latitude: court.latitude, longitude: court.longitude}}
             title={court.name}
-            description={court.type}
+            //description={court.type}
             onPress={() => this.handleSelectCourtMap(court.key)}
         >
         </Marker>)
@@ -131,11 +126,10 @@ export default class CourtMap extends React.Component {
             )
         }
 
-        if (readyToRender) {
-            console.log("blablabla");
+        if (!readyToRender) {
             return (<SafeAreaView style={styles.container}>
 
-                <Text style={styles.infoText}>Courts near you</Text>
+                <Text style={styles.infoText}>BLA</Text>
 
 
                 {this.renderCurrentLocation()}
@@ -163,13 +157,9 @@ export default class CourtMap extends React.Component {
             </SafeAreaView>)
         }
 
-
-        return (
-            <SafeAreaView style={styles.container}>
+        return (<SafeAreaView style={styles.container}>
 
                 <Text style={styles.infoText}>Courts near you</Text>
-
-
                 {this.renderCurrentLocation()}
 
                 <MapView
@@ -194,6 +184,7 @@ export default class CourtMap extends React.Component {
                 </TouchableOpacity>
             </SafeAreaView>
         );
+
     }
 }
 
@@ -255,5 +246,10 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingRight: 10,
         fontSize: 20
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });
