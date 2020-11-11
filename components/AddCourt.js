@@ -23,6 +23,8 @@ export default class AddCourt extends React.Component {
         publicFree: false,
         type: '',
         tags: [],
+        courts: {},
+        courtsReady: false,
         hasLocationPermission: null,
         currentLocation: null,
         userMarkerCoordinates: [],
@@ -111,6 +113,12 @@ export default class AddCourt extends React.Component {
     };
 
     componentDidMount = async () => {
+        await firebase
+            .database()
+            .ref('/courts')
+            .on('value', snapshot => {
+                this.setState({courts: snapshot.val(), courtsReady:true} );
+            });
         await this.getLocationPermission();
         await this.updateLocation();
     };
@@ -149,6 +157,19 @@ export default class AddCourt extends React.Component {
         this.setState({selectedAddress});
     };
 
+    mapMarkers = () => {
+        const {courts} = this.state;
+        const courtArray = Object.values(courts)
+        return courtArray.map((court) => <Marker
+            pinColor={'#008340'}
+            key={court.address}
+            coordinate={{latitude: court.latitude, longitude: court.longitude}}
+            title={court.name}
+            description={court.type}
+        >
+        </Marker>)
+    }
+
     render() {
         const {
             name,
@@ -158,6 +179,7 @@ export default class AddCourt extends React.Component {
             selectedAddress,
             selectedAddressConfirmed,
             currentLocation,
+            courtsReady,
         } = this.state;
 
         const tags = [
@@ -168,7 +190,7 @@ export default class AddCourt extends React.Component {
             {id: 5, label: 'Skateboard'},
         ];
 
-        if (currentLocation == null) {
+        if (currentLocation == null || courtsReady === false) {
             return (
                 <View style={styles.loadingContainer}>
                     <Text style={styles.loadingText}>Getting ready...</Text>
@@ -211,6 +233,7 @@ export default class AddCourt extends React.Component {
                             longitudeDelta: 0.1
                         }}
                     >
+                        {this.mapMarkers()}
 
                         {userMarkerCoordinates.map((coordinate, index) => (
                             <Marker
