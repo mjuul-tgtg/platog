@@ -8,6 +8,9 @@ import {createStackNavigator} from "react-navigation-stack";
 import CourtList from "./components/CourtList";
 import CourtDetails from "./components/CourtDetails";
 import CourtMap from "./components/CourtMap";
+import LoginPage from "./components/LoginPage";
+import SettingsPage from "./components/SettingsPage";
+
 
 const StackNavigator = createStackNavigator(
     {
@@ -65,8 +68,69 @@ const TabNavigator = createBottomTabNavigator({
     },
 });
 
-const AppContainer = createAppContainer(TabNavigator);
 
+const LoginStackNavigator = createStackNavigator(
+    {
+        LoginPage: {
+            screen: LoginPage,
+            navigationOptions:
+                {
+                    title: "Login",
+                    headerShown: false
+                }
+        },
+        MainPage: {
+            screen: createBottomTabNavigator({
+            Main: {
+                screen: viewCourtsContainer,
+                navigationOptions: {
+                    tabBarLabel: "View Courts",
+                    tabBarIcon: ({tintColor}) => (
+                        <AntDesign name="find" size={24} color={tintColor}/>
+                    )
+                },
+            },
+            Add: {
+                screen: AddCourt,
+                navigationOptions: {
+                    tabBarLabel: "Add Court",
+                    tabBarIcon: ({tintColor}) => (
+                        <AntDesign name="plus" size={24} color={tintColor}/>
+                    )
+                },
+            },
+            Settings: {
+                    screen: SettingsPage,
+                    navigationOptions: {
+                        tabBarLabel: "Settings",
+                        tabBarIcon: ({tintColor}) => (
+                            <AntDesign name="setting" size={24} color={tintColor}/>
+                        )
+                    },
+                }
+        },),
+            navigationOptions:
+                {
+                    title: "Main",
+                    headerShown: false
+                }
+}
+    },
+    {
+        initialRouteKey: 'Login',
+        defaultNavigationOptions: {
+            cardStyle: {backgroundColor: '#FFFFFF'},
+        }
+    },
+);
+
+
+
+
+const LoginContainer = createAppContainer(LoginStackNavigator);
+
+
+//export default Stylelist;
 
 export default class App extends React.Component {
 
@@ -89,6 +153,6 @@ export default class App extends React.Component {
     }
 
     render() {
-        return <AppContainer/>;
+        return <LoginContainer/>;
     }
 }
