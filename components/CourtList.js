@@ -8,6 +8,7 @@ import Constants from "expo-constants";
 import CourtMap from "./CourtMap";
 import * as Permissions from "expo-permissions";
 
+
 export default class CourtList extends React.Component {
     state = {
         courts: {},
@@ -34,6 +35,7 @@ export default class CourtList extends React.Component {
         if (currentLocation == null || !courtsSorted) {
             await this.updateLocation();
         }
+
     };
 
     getCourtsFromFirebase = async () => {
