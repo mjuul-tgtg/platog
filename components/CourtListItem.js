@@ -64,17 +64,20 @@ export default class CourtListItem extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#008340',
+        backgroundColor: '#669DB3FF',
         flex: 1,
         borderWidth: 1,
         margin: 5,
+        marginLeft: 30,
+        marginRight: 30,
         padding: 5,
+        borderRadius: 15,
         height: 50,
         justifyContent: 'center'
     },
     label: {
         fontWeight: 'bold',
-        color: '#ffffff',
+        color: '#F0F6F7FF',
         textAlign: 'center',
     },
 });

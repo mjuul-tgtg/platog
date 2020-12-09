@@ -14,19 +14,19 @@ import SettingsPage from "./components/SettingsPage";
 
 const StackNavigator = createStackNavigator(
     {
-        CourtList: {
-            screen: CourtList,
-            navigationOptions:
-                {
-                    title: "List View",
-                    headerShown: false
-                }
-        },
         CourtMap: {
             screen: CourtMap,
             navigationOptions:
                 {
                     title: "Map View",
+                    headerShown: false
+                }
+        },
+        CourtList: {
+            screen: CourtList,
+            navigationOptions:
+                {
+                    title: "List View",
                     headerShown: false
                 }
         },
@@ -37,36 +37,14 @@ const StackNavigator = createStackNavigator(
         },
     },
     {
-        initialRouteKey: 'CourtList',
+        initialRouteKey: 'CourtMap',
         defaultNavigationOptions: {
-            cardStyle: {backgroundColor: '#FFFFFF'},
+            cardStyle: {backgroundColor: '#F0F6F7FF'},
         }
     },
 );
 
 const viewCourtsContainer = createAppContainer(StackNavigator);
-
-
-const TabNavigator = createBottomTabNavigator({
-    Main: {
-        screen: viewCourtsContainer,
-        navigationOptions: {
-            tabBarLabel: "View Courts",
-            tabBarIcon: ({tintColor}) => (
-                <AntDesign name="find" size={24} color={tintColor}/>
-            )
-        },
-    },
-    Add: {
-        screen: AddCourt,
-        navigationOptions: {
-            tabBarLabel: "Add Court",
-            tabBarIcon: ({tintColor}) => (
-                <AntDesign name="plus" size={24} color={tintColor}/>
-            )
-        },
-    },
-});
 
 
 const LoginStackNavigator = createStackNavigator(
@@ -80,6 +58,7 @@ const LoginStackNavigator = createStackNavigator(
                 }
         },
         MainPage: {
+            params: {user: null},
             screen: createBottomTabNavigator({
             Main: {
                 screen: viewCourtsContainer,
@@ -119,7 +98,7 @@ const LoginStackNavigator = createStackNavigator(
     {
         initialRouteKey: 'Login',
         defaultNavigationOptions: {
-            cardStyle: {backgroundColor: '#FFFFFF'},
+            cardStyle: {backgroundColor: '#F0F6F7FF'},
         }
     },
 );

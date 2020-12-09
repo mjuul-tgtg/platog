@@ -161,7 +161,7 @@ export default class AddCourt extends React.Component {
         const {courts} = this.state;
         const courtArray = Object.values(courts)
         return courtArray.map((court) => <Marker
-            pinColor={'#008340'}
+            pinColor={'#669DB3FF'}
             key={court.address}
             coordinate={{latitude: court.latitude, longitude: court.longitude}}
             title={court.name}
@@ -194,7 +194,7 @@ export default class AddCourt extends React.Component {
             return (
                 <View style={styles.loadingContainer}>
                     <Text style={styles.loadingText}>Getting ready...</Text>
-                    <ActivityIndicator size="large" color="#008340"/>
+                    <ActivityIndicator size="large" color="#669DB3FF"/>
                 </View>
             )
         }
@@ -330,7 +330,7 @@ export default class AddCourt extends React.Component {
                     {selectedAddressConfirmed && (
 
                         <TagSelect
-                            theme={'success'}
+                            theme={'info'}
                             style={styles.input}
                             data={tags}
                             ref={(tag) => {
@@ -362,7 +362,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         paddingTop: Constants.statusBarHeight,
-        backgroundColor: '#ffffff',
+        backgroundColor: '#F0F6F7FF',
         padding: 8,
     },
     row: {
@@ -375,34 +375,34 @@ const styles = StyleSheet.create({
         textAlign: 'center', // <-- the magic
         fontWeight: 'bold',
         paddingTop: 10,
-        color: '#008340'
+        color: '#669DB3FF'
     },
     infoTextSmall: {
         fontSize: 15,
         textAlign: 'center', // <-- the magic
         fontWeight: 'bold',
         paddingTop: 10,
-        color: '#008340'
+        color: '#669DB3FF'
     },
     map: {flex: 1000},
     label: {
         fontWeight: 'bold',
-        width: 100,
-        color: '#008340'
-    },
-    input: {borderWidth: 1, flex: 1},
+        width: 100},
+    input: {borderWidth: 1,
+        flex: 1,
+        color:'#669DB3FF'},
     buttonStyle: {
         marginHorizontal: 10,
         marginTop: 5,
         flex: 1,
-        backgroundColor: '#008340'
+        backgroundColor: '#FF4F58FF'
     },
     loadingText: {
         fontSize: 30,
         textAlign: 'center', // <-- the magic
         fontWeight: 'bold',
         paddingTop: 10,
-        color: '#008340'
+        color: '#669DB3FF'
     },
     loadingContainer: {
         flex: 1,
@@ -416,7 +416,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         paddingTop: 10,
         paddingBottom: 10,
-        backgroundColor: '#ff8340',
+        backgroundColor: '#FF4F58FF',
         borderRadius: 10,
         borderWidth: 1,
         borderColor: '#fff'

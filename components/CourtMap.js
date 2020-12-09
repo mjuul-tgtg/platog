@@ -100,7 +100,7 @@ export default class CourtMap extends React.Component {
         const {courts} = this.state;
         const courtArray = Object.values(courts)
         return courtArray.map((court) => <Marker
-            pinColor={'#008340'}
+            pinColor={'#669DB3FF'}
             key={court.address}
             coordinate={{latitude: court.latitude, longitude: court.longitude}}
             title={court.name}
@@ -121,7 +121,7 @@ export default class CourtMap extends React.Component {
         if (currentLocation == null) {
             return (
                 <View style={styles.loadingContainer}>
-                    <ActivityIndicator size="large" color="#008340"/>
+                    <ActivityIndicator size="large" color="#669DB3FF"/>
                 </View>
             )
         }
@@ -158,7 +158,7 @@ export default class CourtMap extends React.Component {
 
         return (<SafeAreaView style={styles.container}>
 
-                <Text style={styles.infoText}>Courts near you</Text>
+                <Text style={styles.infoText}>Courts near you...</Text>
                 {this.renderCurrentLocation()}
 
                 <MapView
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         paddingTop: Constants.statusBarHeight,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#F0F6F7FF',
         padding: 8,
     },
     map: {flex: 1},
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         paddingTop: 20,
         paddingBottom: 5,
-        color: '#008340'
+        color: '#669DB3FF'
     },
     screenButton: {
         marginRight: 40,
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         paddingTop: 10,
         paddingBottom: 10,
-        backgroundColor: '#ff8340',
+        backgroundColor: '#FF4F58FF',
         borderRadius: 10,
         borderWidth: 1,
         borderColor: '#fff'
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         paddingTop: 10,
         paddingBottom: 10,
-        backgroundColor: '#ff8340',
+        backgroundColor: '#A89C94FF',
         borderRadius: 10,
         borderWidth: 1,
         borderColor: '#fff'

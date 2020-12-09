@@ -155,7 +155,7 @@ export default class CourtList extends React.Component {
             return (
                 <View style={styles.loadingContainer}>
                     <Text style={styles.loadingText}>Finding courts near you...</Text>
-                    <ActivityIndicator size="large" color="#008340"/>
+                    <ActivityIndicator size="large" color="#669DB3FF"/>
                 </View>
             )
         }
@@ -171,7 +171,7 @@ export default class CourtList extends React.Component {
             return (
                 <View style={styles.container}>
 
-                    <Text style={styles.infoText}>Courts near you</Text>
+                    <Text style={styles.infoText}>Courts near you...</Text>
 
                     {this.renderCurrentLocation()}
 
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         paddingTop: Constants.statusBarHeight,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#F0F6F7FF',
         padding: 8,
     },
     loadingContainer: {
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
     },
     containerFlatList: {
         justifyContent: 'center',
-        backgroundColor: '#ffffff',
+        backgroundColor: '#F0F6F7FF',
         padding: 0,
         flex: 1
     },
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
         textAlign: 'center', // <-- the magic
         fontWeight: 'bold',
         paddingTop: 10,
-        color: '#008340'
+        color: '#669DB3FF'
     },
     infoText: {
         fontSize: 30,
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         paddingTop: 20,
         paddingBottom: 5,
-        color: '#008340'
+        color: '#669DB3FF'
     },
     screenButton: {
         marginRight: 40,
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         paddingTop: 10,
         paddingBottom: 10,
-        backgroundColor: '#ff8340',
+        backgroundColor: '#FF4F58FF',
         borderRadius: 10,
         borderWidth: 1,
         borderColor: '#fff'
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         paddingTop: 10,
         paddingBottom: 10,
-        backgroundColor: '#ff8340',
+        backgroundColor: '#A89C94FF',
         borderRadius: 10,
         borderWidth: 1,
         borderColor: '#fff'
