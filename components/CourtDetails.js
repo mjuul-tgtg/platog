@@ -6,13 +6,16 @@ import {
     Image,
     Linking,
     TouchableOpacity,
-    Alert
+    Alert, Button, FlatList
 } from 'react-native';
 import firebase from 'firebase';
 
 
 export default class CourtDetails extends React.Component {
-    state = {court: null};
+    state = {
+        court: null,
+        viewSocial: false
+    };
 
 
     componentDidMount() {
@@ -33,12 +36,20 @@ export default class CourtDetails extends React.Component {
         return tags.sort().map(item => item).join(', ');
     }
 
+    ViewSocial = () => {
+        this.setState({viewSocial : true})
+    }
+
+    ViewSocialFalse = () => {
+        this.setState({viewSocial : false})
+    }
+
     handleCheckIn = () => {
         Alert.alert("You are now checked in")
     }
 
     render() {
-        const {court} = this.state;
+        const {court, viewSocial} = this.state;
 
         console.log(court)
 
@@ -46,50 +57,75 @@ export default class CourtDetails extends React.Component {
             return <Text>No data</Text>;
         }
 
+        if (!viewSocial) {
+
+            return (
+                <View style={styles.container}>
+                    <Image
+                        style={styles.courtCover}
+                        source={{
+                            uri: court.images
+                        }}
+                    />
+                    <View style={styles.row}>
+                        <Text style={styles.label}>Name</Text>
+                        <Text style={styles.value}>{court.name}</Text>
+                    </View>
+                    <View style={styles.row}>
+                        <Text style={styles.label}>Address</Text>
+                        <Text style={{color: "blue"}}
+                              onPress={() => Linking.openURL("https://www.google.com/maps/place/" + court.address)}>{court.address}</Text>
+                    </View>
+                    <View style={styles.row}>
+                        <Text style={styles.label}>Postal</Text>
+                        <Text style={styles.value}>{court.postal}</Text>
+                    </View>
+                    <View style={styles.row}>
+                        <Text style={styles.label}>City</Text>
+                        <Text style={styles.value}>{court.city}</Text>
+                    </View>
+                    <View style={styles.row}>
+                        <Text style={styles.label}>Type</Text>
+                        <Text style={styles.value}>{court.type}</Text>
+                    </View>
+                    <View style={styles.row}>
+                        <Text style={styles.label}>Tags</Text>
+                        <Text style={styles.value}>{this.handleTags(court.tags)}</Text>
+                    </View>
+
+                    <View style={{flexDirection: "row"}}>
+                        <View style={styles.buttonStyle}>
+                            <Button color={'#ffffff'} title="Check in" onPress={this.handleCheckIn}/>
+                        </View>
+                        <View style={styles.buttonStyle}>
+                            <Button color={'#ffffff'} title="View checkins" onPress={this.ViewSocial}/>
+                        </View>
+                    </View>
+
+                </View>
+            );
+        }
+
         return (
             <View style={styles.container}>
-                <Image
-                    style={styles.courtCover}
-                    source={{
-                        uri: court.images
-                    }}
-                />
-                <View style={styles.row}>
-                    <Text style={styles.label}>Name</Text>
-                    <Text style={styles.value}>{court.name}</Text>
-                </View>
-                <View style={styles.row}>
-                    <Text style={styles.label}>Address</Text>
-                    <Text style={{color: "blue"}}
-                          onPress={() => Linking.openURL("https://www.google.com/maps/place/" + court.address)}>{court.address}</Text>
-                </View>
-                <View style={styles.row}>
-                    <Text style={styles.label}>Postal</Text>
-                    <Text style={styles.value}>{court.postal}</Text>
-                </View>
-                <View style={styles.row}>
-                    <Text style={styles.label}>City</Text>
-                    <Text style={styles.value}>{court.city}</Text>
-                </View>
-                <View style={styles.row}>
-                    <Text style={styles.label}>Type</Text>
-                    <Text style={styles.value}>{court.type}</Text>
-                </View>
-                <View style={styles.row}>
-                    <Text style={styles.label}>Tags</Text>
-                    <Text style={styles.value}>{this.handleTags(court.tags)}</Text>
-                </View>
 
-                <TouchableOpacity
-                    style={styles.screenButton}
-                    onPress={this.handleCheckIn}
-                    underlayColor='#fff'>
-                    <Text style={styles.buttonText}>Check in</Text>
-                </TouchableOpacity>
+                <Text style={styles.infoText}>Current players add the court</Text>
+                <Text style={styles.infoTextSmall}>Magnus</Text>
+                <Text style={styles.infoTextSmall}>Trine</Text>
+                <Text style={styles.infoTextSmall}>Snitte</Text>
 
+
+                <View style={{flexDirection: "row"}}>
+                    <View style={styles.buttonStyle}>
+                        <Button color={'#ffffff'} title="Check in" onPress={this.handleCheckIn}/>
+                    </View>
+                    <View style={styles.buttonStyle}>
+                        <Button color={'#ffffff'} title="View info" onPress={this.ViewSocialFalse}/>
+                    </View>
+                </View>
 
             </View>
-        );
+        )
     }
 }
 
@@ -104,7 +140,7 @@ const styles = StyleSheet.create({
     label: {
         fontWeight: 'bold',
         width: 100,
-        color: '#008340'
+        color: '#669DB3FF'
     },
     value: {flex: 1},
     courtCover: {
@@ -120,7 +156,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         paddingTop: 10,
         paddingBottom: 10,
-        backgroundColor: '#008340',
+        backgroundColor: '#669DB3FF',
         borderRadius: 10,
         borderWidth: 1,
         borderColor: '#fff'
@@ -131,5 +167,25 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingRight: 10,
         fontSize: 20
+    },
+    buttonStyle: {
+        marginHorizontal: 10,
+        marginTop: 5,
+        flex: 1,
+        backgroundColor: '#669DB3FF'
+    },
+    infoText: {
+        fontSize: 30,
+        textAlign: 'center', // <-- the magic
+        fontWeight: 'bold',
+        paddingTop: 10,
+        color: '#669DB3FF'
+    },
+    infoTextSmall: {
+        fontSize: 15,
+        textAlign: 'center', // <-- the magic
+        fontWeight: 'bold',
+        paddingTop: 10,
+        color: '#669DB3FF'
     }
 });

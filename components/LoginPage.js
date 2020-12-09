@@ -15,6 +15,7 @@ import * as Google from 'expo-google-app-auth';
 import {AntDesign} from "@expo/vector-icons";
 import Constants from "expo-constants";
 
+
 const googleConfig = {
     iosClientId: '603386649315-vp4revvrcgrcjme51ebuhbkbspl048l9.apps.googleusercontent.com',
     androidClientId: '603386649315-9rbv8vmv2vvftetfbvlrbufcps1fajqf.apps.googleusercontent.com',
@@ -34,7 +35,6 @@ export default class LoginPage extends React.Component {
         this.props.navigation.navigate('MainPage',{ user });
     }
 
-
     HandleGoogleLogin = async () => {
         try {
             const {type, user} = await Google.logInAsync(googleConfig)
@@ -49,7 +49,6 @@ export default class LoginPage extends React.Component {
                 this.changeToMainView(user);
 
             } else if (type === "cancel") {
-                Alert.alert("HELLO THERE")
             }
 
         } catch (e) {
@@ -72,7 +71,7 @@ export default class LoginPage extends React.Component {
                     <Image
                         style={styles.courtCover}
                         source={{
-                            uri:"https://www.bls.gov/spotlight/2017/sports-and-exercise/images/cover_image.jpg"
+                            uri:"https://drive.google.com/uc?export=view&id=1a64rN7nLsMBculwV6aUFPJ67X-ag683p"
                         }}
                     />
 
@@ -92,28 +91,37 @@ export default class LoginPage extends React.Component {
                         />
                     </View>
 
+
+
                     <View style={{flexDirection: "row",
                                   padding: 5}}>
+
                         <TouchableOpacity
-                            style={styles.screenButtonSmall}
-                            onPress={this.HandleGoogleLogin}
-                            underlayColor='#fff'>
-                            <Text style={styles.buttonText}>Google</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.screenButtonSmall}
-                            onPress={this.HandleGoogleLogin}
+                            style={styles.screenButtonLogin}
                             underlayColor='#fff'>
                             <Text style={styles.buttonText}>Login</Text>
+                        </TouchableOpacity>
+
+
+                        <TouchableOpacity
+                            style={styles.screenButtonRegister}
+                            underlayColor='#fff'>
+                            <Text style={styles.buttonText}>Register</Text>
                         </TouchableOpacity>
                     </View>
 
 
+
+
                     <TouchableOpacity
-                        style={styles.screenButton}
-                        onPress={this.HandleGoogleLogin}
-                        underlayColor='#fff'>
-                        <Text style={styles.buttonText}>Register</Text>
+                        onPress={this.HandleGoogleLogin}>
+                        <Image
+                            style={styles.loginImage}
+                            source={{
+                                uri:"https://avatars1.githubusercontent.com/u/7328930?v=4"
+                            }}
+                            onc
+                        />
                     </TouchableOpacity>
 
                 </View>
@@ -128,7 +136,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         paddingTop: Constants.statusBarHeight,
-        backgroundColor: '#ffffff',
+        backgroundColor: '#F0F6F7FF',
         padding: 8,
     },
     row: {
@@ -141,20 +149,20 @@ const styles = StyleSheet.create({
         textAlign: 'center', // <-- the magic
         fontWeight: 'bold',
         paddingTop: 10,
-        color: '#008340'
+        color: '#669DB3FF'
     },
     infoTextSmall: {
         fontSize: 25,
         textAlign: 'center', // <-- the magic
         fontWeight: 'bold',
         paddingTop: 10,
-        color: '#008340'
+        color: '#669DB3FF'
     },
     map: {flex: 1000},
     label: {
         fontWeight: 'bold',
         width: 100,
-        color: '#008340'
+        color: '#2460A7FF'
     },
     input: {
         borderWidth: 1,
@@ -169,40 +177,41 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         marginTop: 5,
         flex: 1,
-        backgroundColor: '#008340'
+        backgroundColor: '#669DB3FF'
     },
     loadingText: {
         fontSize: 30,
         textAlign: 'center', // <-- the magic
         fontWeight: 'bold',
         paddingTop: 10,
-        color: '#008340'
+        color: '#669DB3FF'
     },
     loadingContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
     },
-    screenButton: {
-        marginRight: 40,
-        marginLeft: 40,
-        marginBottom: 10,
-        marginTop: 10,
-        paddingTop: 10,
-        paddingBottom: 10,
-        backgroundColor: '#ff8340',
-        borderRadius: 10,
-        borderWidth: 1,
-        borderColor: '#fff'
-    },
-    screenButtonSmall: {
+    screenButtonRegister: {
         marginRight: 1,
-        marginLeft: 21,
+        marginLeft: 26,
         marginBottom: 1,
         marginTop: 1,
         paddingTop: 10,
         paddingBottom: 10,
-        backgroundColor: '#008340',
+        backgroundColor: '#A89C94FF',
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#fff',
+        width: '40%'
+    },
+    screenButtonLogin: {
+        marginRight: 1,
+        marginLeft: 26,
+        marginBottom: 1,
+        marginTop: 1,
+        paddingTop: 10,
+        paddingBottom: 10,
+        backgroundColor: '#669DB3FF',
         borderRadius: 10,
         borderWidth: 1,
         borderColor: '#fff',
@@ -220,4 +229,10 @@ const styles = StyleSheet.create({
         height: 200,
         resizeMode: 'contain'
     },
+    loginImage: {
+    width: null,
+        paddingTop:20,
+        height: 75,
+        resizeMode: 'contain'
+},
 });
