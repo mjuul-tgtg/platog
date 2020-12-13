@@ -31,7 +31,6 @@ export default class LoginPage extends React.Component {
     }
 
     changeToMainView= (user) => {
-        console.log(user)
         this.props.navigation.navigate('MainPage',{ user });
     }
 

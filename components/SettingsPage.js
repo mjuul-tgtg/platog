@@ -22,6 +22,13 @@ export default class SettingsPage extends React.Component {
                     style={styles.screenButton}
                     onPress={this.HandleLogOut}
                     underlayColor='#fff'>
+                    <Text style={styles.buttonText}>My friends</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={styles.screenButtonLogOut}
+                    onPress={this.HandleLogOut}
+                    underlayColor='#fff'>
                     <Text style={styles.buttonText}>Log out</Text>
                 </TouchableOpacity>
 
@@ -99,11 +106,24 @@ const styles = StyleSheet.create({
         marginTop: 10,
         paddingTop: 10,
         paddingBottom: 10,
-        backgroundColor: '#FF4F58FF',
+        backgroundColor: '#A89C94FF',
         borderRadius: 10,
         borderWidth: 1,
         borderColor: '#fff'
     },
+    screenButtonLogOut: {
+        marginRight: 40,
+        marginLeft: 40,
+        marginBottom: 10,
+        marginTop: 10,
+        paddingTop: 10,
+        paddingBottom: 10,
+        backgroundColor: '#FF4F58FF',
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#fff'
+    }
+    ,
     screenButtonSmall: {
         marginRight: 1,
         marginLeft: 21,

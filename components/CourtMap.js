@@ -116,8 +116,6 @@ export default class CourtMap extends React.Component {
             readyToRender
         } = this.state;
 
-        console.log(readyToRender)
-
         if (currentLocation == null) {
             return (
                 <View style={styles.loadingContainer}>

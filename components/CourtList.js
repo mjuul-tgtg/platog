@@ -48,7 +48,6 @@ export default class CourtList extends React.Component {
     }
 
     handleSelectCourt = id => {
-        console.log("ID: " + id)
         this.props.navigation.navigate('CourtDetails', {id});
     };
 
