@@ -2,7 +2,7 @@ import * as React from 'react';
 import {
     Text,
     StyleSheet,
-    TouchableOpacity,
+    TouchableOpacity, Image, View,
 } from 'react-native';
 
 export default class CourtListItem extends React.Component {
@@ -53,6 +53,12 @@ export default class CourtListItem extends React.Component {
 
         return (
             <TouchableOpacity style={styles.container} onPress={this.handlePress}>
+                <Image
+                    style={styles.courtCover}
+                    source={{
+                        uri: court.images
+                    }}
+                />
                 <Text style={styles.label}>
                     {court.name} - {distance}
                 </Text>
@@ -72,12 +78,21 @@ const styles = StyleSheet.create({
         marginRight: 30,
         padding: 5,
         borderRadius: 15,
-        height: 50,
+        height: 150,
         justifyContent: 'center'
     },
     label: {
         fontWeight: 'bold',
         color: '#F0F6F7FF',
         textAlign: 'center',
+        padding:10
     },
+    courtCover: {
+        flex: 1,
+        padding: 10,
+        width: null,
+        height: null,
+        borderRadius: 15,
+
+    }
 });
