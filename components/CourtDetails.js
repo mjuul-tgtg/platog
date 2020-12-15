@@ -149,17 +149,6 @@ export default class CourtDetails extends React.Component {
                         <Button color={'#ffffff'} title="Join game" onPress={this.handleJoinGame}/>
                     </View>
                 </View>
-                <View style={styles.pickUpRows}>
-                    <View>
-                        <Text style={styles.infoTextSmall}>23/12 13:30-14:30 - 4/5</Text>
-                    </View>
-                    <View style={styles.buttonStyleGray}>
-                        <Button color={'#ffffff'} title="Details" onPress={this.handleDetailsForPickup}/>
-                    </View>
-                    <View style={styles.buttonStyle}>
-                        <Button color={'#ffffff'} title="Join game" onPress={this.handleJoinGame}/>
-                    </View>
-                </View>
                 <View style={{flexDirection: "row",
                     paddingLeft:5,
                     paddingTop:5,

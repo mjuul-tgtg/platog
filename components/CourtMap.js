@@ -119,15 +119,16 @@ export default class CourtMap extends React.Component {
         if (currentLocation == null) {
             return (
                 <View style={styles.loadingContainer}>
+                    <Text style={styles.infoText}>Finding courts near you...</Text>
                     <ActivityIndicator size="large" color="#669DB3FF"/>
                 </View>
             )
         }
-
+        /*
         if (!readyToRender) {
             return (<SafeAreaView style={styles.container}>
 
-                <Text style={styles.infoText}>Courts near you</Text>
+                <Text style={styles.infoText}>Courts near you...</Text>
 
                 {this.renderCurrentLocation()}
 
@@ -153,6 +154,10 @@ export default class CourtMap extends React.Component {
                 </TouchableOpacity>
             </SafeAreaView>)
         }
+
+
+         */
+
 
         return (<SafeAreaView style={styles.container}>
 

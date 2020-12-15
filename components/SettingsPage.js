@@ -3,7 +3,7 @@ import {
     Text,
     View,
     StyleSheet,
-    TouchableOpacity,
+    TouchableOpacity, Alert,
 } from 'react-native';
 import Constants from "expo-constants";
 
@@ -13,6 +13,10 @@ export default class SettingsPage extends React.Component {
         this.props.navigation.navigate('LoginPage');
     }
 
+    HandleMyFriends = () => {
+        Alert.alert("A list of your friends will appear")
+    }
+
     render() {
 
         return (
@@ -20,7 +24,7 @@ export default class SettingsPage extends React.Component {
 
                 <TouchableOpacity
                     style={styles.screenButton}
-                    onPress={this.HandleLogOut}
+                    onPress={this.HandleMyFriends}
                     underlayColor='#fff'>
                     <Text style={styles.buttonText}>My friends</Text>
                 </TouchableOpacity>

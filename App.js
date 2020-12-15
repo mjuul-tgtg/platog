@@ -12,7 +12,7 @@ import LoginPage from "./components/LoginPage";
 import SettingsPage from "./components/SettingsPage";
 
 
-const StackNavigator = createStackNavigator(
+const ViewCourtsStackNavigator = createStackNavigator(
     {
         CourtMap: {
             screen: CourtMap,
@@ -44,7 +44,7 @@ const StackNavigator = createStackNavigator(
     },
 );
 
-const viewCourtsContainer = createAppContainer(StackNavigator);
+const viewCourtsContainer = createAppContainer(ViewCourtsStackNavigator);
 
 
 const LoginStackNavigator = createStackNavigator(
