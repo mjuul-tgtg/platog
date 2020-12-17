@@ -199,25 +199,6 @@ const styles = StyleSheet.create({
         height: null,
         resizeMode: 'contain'
     },
-    screenButton: {
-        marginRight: 40,
-        marginLeft: 40,
-        marginBottom: 10,
-        marginTop: 10,
-        paddingTop: 10,
-        paddingBottom: 10,
-        backgroundColor: '#669DB3FF',
-        borderRadius: 10,
-        borderWidth: 1,
-        borderColor: '#fff'
-    },
-    buttonText: {
-        color: '#fff',
-        textAlign: 'center',
-        paddingLeft: 10,
-        paddingRight: 10,
-        fontSize: 20
-    },
     buttonStyle: {
         marginHorizontal: 10,
         marginTop: 5,

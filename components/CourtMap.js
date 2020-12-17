@@ -199,17 +199,6 @@ const styles = StyleSheet.create({
         padding: 8,
     },
     map: {flex: 1},
-    infoBox: {
-        height: 100,
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: 'yellow',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flex: 1,
-    },
     infoText: {
         fontSize: 30,
         textAlign: 'center', // <-- the magic

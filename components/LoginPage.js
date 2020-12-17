@@ -157,12 +157,6 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         color: '#669DB3FF'
     },
-    map: {flex: 1000},
-    label: {
-        fontWeight: 'bold',
-        width: 100,
-        color: '#2460A7FF'
-    },
     input: {
         borderWidth: 1,
         flex: 1,
@@ -171,24 +165,6 @@ const styles = StyleSheet.create({
         marginRight: 30,
         textAlign: 'center'
 
-    },
-    buttonStyle: {
-        marginHorizontal: 10,
-        marginTop: 5,
-        flex: 1,
-        backgroundColor: '#669DB3FF'
-    },
-    loadingText: {
-        fontSize: 30,
-        textAlign: 'center', // <-- the magic
-        fontWeight: 'bold',
-        paddingTop: 10,
-        color: '#669DB3FF'
-    },
-    loadingContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
     },
     screenButtonRegister: {
         marginRight: 1,
