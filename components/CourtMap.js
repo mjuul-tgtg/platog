@@ -124,40 +124,6 @@ export default class CourtMap extends React.Component {
                 </View>
             )
         }
-        /*
-        if (!readyToRender) {
-            return (<SafeAreaView style={styles.container}>
-
-                <Text style={styles.infoText}>Courts near you...</Text>
-
-                {this.renderCurrentLocation()}
-
-                <MapView
-                    provider="google"
-                    style={styles.map}
-                    ref={this.mapViewRef}
-                    showsUserLocation
-                    initialRegion={{
-                        latitude: currentLocation.latitude,
-                        longitude: currentLocation.longitude,
-                        latitudeDelta: 0.1,
-                        longitudeDelta: 0.1
-                    }}>
-                    {this.mapMarkers()}
-                </MapView>
-
-                <TouchableOpacity
-                    style={styles.screenButton}
-                    onPress={this.changeToListView}
-                    underlayColor='#fff'>
-                    <Text style={styles.buttonText}>Change to ListView</Text>
-                </TouchableOpacity>
-            </SafeAreaView>)
-        }
-
-
-         */
-
 
         return (<SafeAreaView style={styles.container}>
 
