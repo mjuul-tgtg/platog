@@ -79,17 +79,22 @@ const styles = StyleSheet.create({
         padding: 5,
         borderRadius: 15,
         height: 150,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        shadowColor: 'rgba(0,0,0, .4)', // IOS
+        shadowOffset: { height: 1, width: 1 }, // IOS
+        shadowOpacity: 1, // IOS
+        shadowRadius: 1, //IOS
     },
     label: {
+        fontSize: 20,
         fontWeight: 'bold',
         color: '#F0F6F7FF',
         textAlign: 'center',
-        padding:10
+        padding:5,
     },
     courtCover: {
         flex: 1,
-        padding: 10,
+        padding: 1,
         width: null,
         height: null,
         borderRadius: 15,
